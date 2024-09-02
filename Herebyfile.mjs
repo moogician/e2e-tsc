@@ -21,6 +21,7 @@ import {
     localBaseline,
     refBaseline,
     runConsoleTests,
+    runE2ETests,
 } from "./scripts/build/tests.mjs";
 import {
     Debouncer,
@@ -676,6 +677,13 @@ export const runTests = task({
 //     "   --shards": "Total number of shards running tests (default: 1)",
 //     "   --shardId": "1-based ID of this shard (default: 1)",
 // };
+
+export const testE2E = task({
+    name: "test-e2e",
+    description: "Run e2e tests",
+    dependencies: runtestsDeps,
+    run: () => runE2ETests("./built/local/tsc.js"),
+});
 
 export const runTestsAndWatch = task({
     name: "runtests-watch",

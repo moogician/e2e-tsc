@@ -24,6 +24,23 @@ export const refBaseline = "tests/baselines/reference/";
 export const coverageDir = "coverage";
 
 /**
+ * @param {string} tscJs
+ * @param {object} options
+ * @param {CancelToken} [options.token]
+ */
+export async function runE2ETests(tscJs, options = {}) {
+    const args = [];
+    args.push(tscJs, "source.ts")
+    args.push("--outfile", "final.js")
+    process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
+    try {
+        await exec(process.execPath, args, {token: options.token}) // run tsc
+    } finally {
+        await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report", "--experimental-monocart"], { token: options.token });
+    }
+}
+
+/**
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
@@ -149,6 +166,9 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
 
         try {
+            console.log("WSHATTWOEIBEGWOIWEGOIBOGWOIOGWEBOGWOBIWEBOGEI")
+            console.log(process.execPath)
+            console.log(args)
             await exec(process.execPath, args, { token: options.token });
         }
         finally {
